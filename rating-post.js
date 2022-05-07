@@ -1,8 +1,9 @@
 /**
  * Lambda to take in a request for a rating and save the rating.
- */ 
+ */
  'use strict';
  const AWS = require('aws-sdk');
+ var ses = new AWS.SES();
  const Utils = require('utils.js');
  
  /** Entry point for the lambda */
@@ -19,6 +20,23 @@
          await Utils.checkAndAddDetails(event);
  
          console.log(`Rating recevied lower than existing average: ${ratingBelowAverage}`);
+         if (ratingBelowAverage) {
+             let emailParams = {
+                 Destination: {
+                     ToAddresses: [`${process.env.toEmailAddress}`],
+                 },
+                 Message: {
+                     Body: {
+                         Text: { Data: `Rating Below Average Received` },
+                     },
+                     Subject: { Data: `Restaurant ${event['Name']} received a rating ${event['Rating']}below its current average.` },
+                 },
+                 Source: `${process.env.fromEmailAddress}`,
+             };
+ 
+             // Create the promise and SES service object
+             await ses.sendEmail(emailParams).promise();
+         }
      }
      catch (err) {
          if (typeof err == 'object' && err.hasOwnProperty('httpStatus')) {
