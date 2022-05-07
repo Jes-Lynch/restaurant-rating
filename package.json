@@ -1,0 +1,18 @@
+{
+  "name": "restaurantrater",
+  "version": "0.0.1",
+  "description": "Public API example for rating restaurants",
+  "main": "ratings.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ratings"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "uuid": "^8.3.2"
+  }
+}
